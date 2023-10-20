@@ -1,0 +1,83 @@
+$size:20;
+
+@while $size < 100 {
+    $size: $size + 5;
+
+    .size-#{$size} {
+        height: $size + px;
+        min-height: $size + px;
+        max-height: $size + px;
+        width: $size + px;
+        min-width: $size + px;
+        max-width: $size + px;
+    }
+}
+
+$fs: 8;
+
+@while $fs < 40 {
+    $fs: $fs + 2;
+
+    .font-#{$fs} {
+        font-size: $fs + px;
+    }
+}
+
+.object-center {
+    object-position: center;
+}
+
+.object-cover {
+    object-fit: cover;
+}
+
+.object-contain {
+    object-fit: contain;
+}
+
+.object-fill {
+    object-fit: fill;
+}
+
+.table-card {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    table-layout: fixed;
+    font-size: 12px;
+}
+
+@media screen and (max-width: 790px) {
+    .table-card thead {
+        border: none;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px;
+    }
+
+    .table-card tr {
+        display: block;
+    }
+
+    .table-card td {
+        display: block;
+        text-align: right;
+        font-size: 12px;
+        padding: 10px 15px !important;
+    }
+
+    .table-card td::before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .table-card td:last-child {
+        border-bottom: 5px solid #f5f5f5;
+    }
+}
