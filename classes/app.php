@@ -10,5 +10,3 @@ require_once "functions.php";
 require_once "middleware.php";
 require_once "auth.php";
 require_once "media.php";
-?>
-

@@ -46,7 +46,7 @@ class module {
 
     public static function create() {
         if(self::$action == "create"){
-            $data = DB::create("categories", [
+            DB::create("categories", [
                 "name" => self::$name,
                 "is_editable" => self::$is_editable,
                 "is_active" => self::$is_active,
@@ -62,14 +62,14 @@ class module {
 
     public static function update(){
         if(self::$action == "update"){
-            $data = DB::update("categories", [
+            DB::update("categories", [
                 "name" => self::$name,
                 "is_editable" => self::$is_editable,
                 "is_active" => self::$is_active,
                 "updated_at" => date('Y-m-d H:i:s')
             ]);
-            $data = DB::where(["id" => self::$id]);
-            $data = DB::execute();
+            DB::where(["id" => self::$id]);
+            DB::execute();
     
 
             msg::set("1 row updated successfuly","success");
@@ -79,10 +79,7 @@ class module {
 
     public static function delete(){
         if(self::$action == "delete"){
-            $data = DB::delete("categories");
-            $data = DB::where(["id" => self::$id]);
-            $data = DB::execute();
-
+            DB::delete("categories")::where(["id" => self::$id])::execute();
             msg::set("1 row deleted successfuly","success");
 
         }

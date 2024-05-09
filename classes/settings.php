@@ -20,4 +20,3 @@ config::setUrl("http://localhost/budget_planner/");
 
 // set session
 config::session(true);
-

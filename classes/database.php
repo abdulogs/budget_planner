@@ -1,6 +1,7 @@
 <?php
 /* Database class */
-class DB extends config {
+class DB extends config
+{
 
 	/*** Properties ***/
 	private static $params = [];
@@ -19,48 +20,54 @@ class DB extends config {
 	private static $page = 1;
 
 	/*** Add space before or after the string utility ***/
-	public static function space($value){
-		return " ".$value." ";
+	public static function space($value)
+	{
+		return " " . $value . " ";
 	}
 
 	/*** Is null utility ***/
-	public static function is_null($condition, $value){
+	public static function is_null($condition, $value)
+	{
 		return ($condition) ? $value : "";;
 	}
 
 	/*** Columns ***/
-	public static function select(...$columns){
+	public static function select(...$columns)
+	{
 		// Assigning "select" to the query type variable
 		self::$type = "select";
-	
+
 		// Check if columns is not a empty string then put comma before the start of the string
 		$_columns = (!empty(self::$columns)) ? ", " : " ";
 		// Get all the columns
 		foreach ($columns as $column) {
-			$_columns .= $column.", ";
+			$_columns .= $column . ", ";
 		}
 		// Remove last comma from the string
 		$_columns = substr($_columns, 0, -2);
 		self::$columns .= $_columns;
 		return __CLASS__;
-	} 
+	}
 
 	/*** Table ***/
-	public static function from($table){
+	public static function from($table)
+	{
 		// Assigning the table name for later use
 		self::$table = self::space($table);
 		return __CLASS__;
 	}
-	
+
 	/*** Distinct ***/
-	public static function distinct(){
+	public static function distinct()
+	{
 		// Assigning the distinct value true for later use
 		self::$distinct = " DISTINCT ";
 		return __CLASS__;
 	}
-	
+
 	/*** Order by ***/
-	public static function sort($column, $type = ""){
+	public static function sort($column, $type = "")
+	{
 		// Check if order string is not a empty string then put comma before the start of the string
 		self::$order .= (!empty(self::$order)) ? ", " : " ";
 		// For example id DESC, id ASC
@@ -69,40 +76,46 @@ class DB extends config {
 	}
 
 	/*** Inner Join ***/
-	public static function innerJoin($table, $column1, $column2){
+	public static function innerJoin($table, $column1, $column2)
+	{
 		self::$joins .= " INNER JOIN {$table} ON {$column1} = $column2 ";
 		return __CLASS__;
 	}
 
 	/*** LEFT Join ***/
-	public static function leftJoin($table, $column1, $column2){
+	public static function leftJoin($table, $column1, $column2)
+	{
 		self::$joins .= " LEFT JOIN {$table} ON {$column1} = $column2 ";
 		return __CLASS__;
 	}
 
 	/*** Right Join ***/
-	public static function rightJoin($table, $column1, $column2){
+	public static function rightJoin($table, $column1, $column2)
+	{
 		self::$joins .= " RIGHT JOIN {$table} ON {$column1} = $column2 ";
 		return __CLASS__;
 	}
 
 
 	/*** Limit ***/
-	public static function limit($limit){
-		self::$limit = " LIMIT ".$limit;
+	public static function limit($limit)
+	{
+		self::$limit = " LIMIT " . $limit;
 		return __CLASS__;
 	}
 
 	/*** Group by ***/
-	public static function group_by($col){
+	public static function group_by($col)
+	{
 		// Assigning the group name for later use
-		self::$group_by = " GROUP BY".self::space($col);
+		self::$group_by = " GROUP BY" . self::space($col);
 		return __CLASS__;
 	}
 
 
 	/*** Paging ***/
-	public static function paging($page = "", $limit = ""){
+	public static function paging($page = "", $limit = "")
+	{
 		$limit = (empty($limit)) ? parent::$dbLimit : $limit;
 		$page = (isset($_GET["page"])) ? $_GET["page"] : 1;
 		self::$page = $page;
@@ -111,26 +124,28 @@ class DB extends config {
 		self::$limit = $limit;
 		return __CLASS__;
 	}
-	
-	// Next or previous btns
-	public static function btns($url, $arr){
-		$page = (self::$page == 0) ? 1 : self::$page; 
 
-		if($page > 1) {
-			echo '<a href="'.$url.'.php?page='.$page - '1'.'" class="btn btn-dark px-4 rounded-5 mx-1">Back</a>';
+	// Next or previous btns
+	public static function btns($url, $arr)
+	{
+		$page = (self::$page == 0) ? 1 : self::$page;
+
+		if ($page > 1) {
+			echo '<a href="' . $url . '.php?page=' . $page - '1' . '" class="btn btn-dark px-4 rounded-5 mx-1">Back</a>';
 		} else {
-            echo '<button class="btn btn-dark  px-4 rounded-5 mx-1" disabled>Back</button>';
+			echo '<button class="btn btn-dark  px-4 rounded-5 mx-1" disabled>Back</button>';
 		}
 
-		if(count($arr) ==  self::$dbLimit){
-			echo '<a href="'.$url.'.php?page='.$page + '1'.'" class="btn btn-dark px-4 rounded-5 mx-1">Next</a>';
+		if (count($arr) ==  self::$dbLimit) {
+			echo '<a href="' . $url . '.php?page=' . $page + '1' . '" class="btn btn-dark px-4 rounded-5 mx-1">Next</a>';
 		} else {
-            echo '<button class="btn btn-dark  px-4 rounded-5 mx-1" disabled>Next</button>';
+			echo '<button class="btn btn-dark  px-4 rounded-5 mx-1" disabled>Next</button>';
 		}
 	}
 
 	/*** Create ***/
-	public static function create($table, $columns){
+	public static function create($table, $columns)
+	{
 		// Assigning "create" to the query type variable
 		self::$type = "create";
 
@@ -141,7 +156,7 @@ class DB extends config {
 		self::$params = array_merge($columns, self::$params);
 
 		// Getting all the column names and separating them with commas
-		self::$columns .= "(" . implode(", " , array_keys($columns)) . ")";
+		self::$columns .= "(" . implode(", ", array_keys($columns)) . ")";
 
 		self::$columns .= " VALUES (";
 
@@ -157,7 +172,8 @@ class DB extends config {
 	}
 
 	/*** Update ***/
-	public static function update($table ,$columns) {
+	public static function update($table, $columns)
+	{
 		// Assigning "update" to the query type variable
 		self::$type = "update";
 
@@ -179,7 +195,8 @@ class DB extends config {
 	}
 
 	/*** Delete ***/
-	public static function delete($table){
+	public static function delete($table)
+	{
 		// Assigning "delete" to the query type variable
 		self::$type = "delete";
 		// Assigning the table name for later use
@@ -188,54 +205,57 @@ class DB extends config {
 	}
 
 	/*** First record ***/
-	public static function first($column = "id"){
+	public static function first($column = "id")
+	{
 		return self::$other = "ORDER BY {$column} ASC LIMIT 1";
 	}
 
 	/*** Last record ***/
-	public static function last($column = "id"){
+	public static function last($column = "id")
+	{
 		return self::$other = "ORDER BY {$column} DESC LIMIT 1";
 	}
 
 	/*** Where ***/
-	public static function where($condition, $operator="AND"){
+	public static function where($condition, $operator = "AND")
+	{
 
 		// $condition = array_filter($condition, fn($value) => !is_null($value) && $value !== '');
 
 		// Getting all the column values by merging two arrays
 		self::$params = array_merge(self::$params, $condition);
 
-		if(empty(self::$condition)){
+		if (empty(self::$condition)) {
 			self::$condition .= "(";
-	
+
 			// Getting all the values of the columns and letting them to be a ? for prepare statement
-			foreach($condition as $key => $value){
-				self::$condition .= $key . "= ? ".$operator." ";
+			foreach ($condition as $key => $value) {
+				self::$condition .= $key . "= ? " . $operator . " ";
 			}
 
 			// Removing last operator from the string after ? 
-			self::$condition = substr(self::$condition, 0,  -strlen($operator) - 1).")";
-		} else if(!empty($condition)){
-		
-			self::$condition .= " ".$operator." (";
+			self::$condition = substr(self::$condition, 0,  -strlen($operator) - 1) . ")";
+		} else if (!empty($condition)) {
+
+			self::$condition .= " " . $operator . " (";
 
 			// Getting all the values of the columns and letting them to be a ? for prepare statement
-			foreach($condition as $key => $value){
-				self::$condition .= $key . "= ? ".$operator." ";
+			foreach ($condition as $key => $value) {
+				self::$condition .= $key . "= ? " . $operator . " ";
 			}
 
 			// Removing last operator from the string after ? 
-			self::$condition = substr(self::$condition, 0,  -strlen($operator) - 1).")";
-		
+			self::$condition = substr(self::$condition, 0,  -strlen($operator) - 1) . ")";
 		}
 		return __CLASS__;
 	}
 
 
 	/*** In ***/
-	public static function in($col, $condition, $operator = ""){
+	public static function in($col, $condition, $operator = "")
+	{
 		// Convert string to array after spiliting comma to index
-		if(!is_array($condition)){
+		if (!is_array($condition)) {
 			$condition = explode(",", $condition);
 		} else {
 			$condition = $condition;
@@ -245,11 +265,11 @@ class DB extends config {
 		self::$params = array_merge(self::$params, $condition);
 
 		self::$condition .= self::space($operator);
-		self::$condition .= self::space($col." IN");
+		self::$condition .= self::space($col . " IN");
 		self::$condition .= "(";
 
 		// Getting all the values of the columns and letting them to be a ? for prepare statement
-		foreach($condition as $option){
+		foreach ($condition as $option) {
 			self::$condition .= "?, ";
 		}
 
@@ -260,7 +280,8 @@ class DB extends config {
 	}
 
 	/*** Search ***/
-	public static function search($condition, $operator="AND"){
+	public static function search($condition, $operator = "AND")
+	{
 		// Getting all the column values by merging two arrays
 		self::$params = array_merge(self::$params, $condition);
 
@@ -268,19 +289,20 @@ class DB extends config {
 
 		// Getting all the values of the columns and letting them to be a ? for prepare statement
 		for ($i = 0; $i < count($condition); ++$i) {
-			self::$condition .= array_keys($condition)[$i] . " LIKE '%' ? '%' ".$operator." ";
+			self::$condition .= array_keys($condition)[$i] . " LIKE '%' ? '%' " . $operator . " ";
 		}
 
 		// Removing last operator from the string after ? 
-		self::$condition = substr(self::$condition, 0,  -strlen($operator) - 1 )." ) ";
+		self::$condition = substr(self::$condition, 0,  -strlen($operator) - 1) . " ) ";
 		return __CLASS__;
 	}
 
 	/*** Execute ***/
-	public static function execute($exec = ""){
+	public static function execute($exec = "")
+	{
 		$query = "";
 		// Making a query string
-		if(self::$type == "select"){	
+		if (self::$type == "select") {
 			$query .= self::space("SELECT");
 			$query .= self::$distinct;
 			$query .= self::$columns;
@@ -294,18 +316,18 @@ class DB extends config {
 			$query .= self::$order;
 			$query .= self::$limit;
 			$query .= self::$other;
-		} else if(self::$type == "create"){
+		} else if (self::$type == "create") {
 			$query .= self::space("INSERT INTO");
 			$query .= self::$table;
 			$query .= self::$columns;
-		} else if(self::$type == "update"){
+		} else if (self::$type == "update") {
 			$query .= self::space("UPDATE");
 			$query .= self::$table;
 			$query .= self::space("SET");
 			$query .= self::$columns;
 			$query .= self::is_null(self::$condition, " WHERE ");
 			$query .= self::$condition;
-		} else if(self::$type == "delete"){
+		} else if (self::$type == "delete") {
 			$query .= self::space("DELETE FROM");
 			$query .= self::$table;
 			$query .= self::is_null(self::$condition, " WHERE ");
@@ -318,17 +340,17 @@ class DB extends config {
 		$params = urldecode(http_build_query(self::$params, ' ', '<br><br>'));
 
 		// Display the query 
-		if($exec == "query"){	
+		if ($exec == "query") {
 			$template = "<div style='font-size:14px;font-family:arial;position:fixed;left:20%;right:20%;top:20%;z-inded:999;background:#222;color:white;border-radius:15px;padding:20px;box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;'>";
 			$template .= "<h1 style='color:orange;'>SQL QUERY</h1>";
-			$template .= "<p style='font-size:14px;'><q>".self::$query."</q></p>";
-			if(count(array_values(self::$params)) !== 0){
+			$template .= "<p style='font-size:14px;'><q>" . self::$query . "</q></p>";
+			if (count(array_values(self::$params)) !== 0) {
 				$template .= "<h3 style='color:yellow;'>Binding params</h3>";
-				$template .= "<p style='background:#fff;color:#000;border-radius:5px;padding:10px;'>".$params."</p>";
+				$template .= "<p style='background:#fff;color:#000;border-radius:5px;padding:10px;'>" . $params . "</p>";
 			}
 			$template .= "</div>";
 			echo $template;
-		} 
+		}
 
 		// Execute the query 
 		try {
@@ -351,7 +373,6 @@ class DB extends config {
 
 			// Returning the main result after execution
 			self::$query = $result;
-
 		} catch (Exception $e) {
 			$template = "<div style='font-size:14px;font-family:arial;position:fixed;left:20%;right:20%;top:20%;z-inded:9999;background:#222;color:white;border-radius:15px;padding:20px;box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;'>";
 			$template .= "<h1 style='color:red;font-family:arial;margin:10px 0;'>Query error occured</h1>";
@@ -360,16 +381,16 @@ class DB extends config {
 			$template .= "<p><b>Message</b> :</b> {$e->getMessage()}</p>";
 			$template .= "<hr>";
 			$template .= "<h3 style='color:orange;'>SQL QUERY</h3>";
-			$template .= "<p style='font-size:14px;'><q>".self::$query."</q></p>";
-			if(count(array_values(self::$params)) !== 0){
+			$template .= "<p style='font-size:14px;'><q>" . self::$query . "</q></p>";
+			if (count(array_values(self::$params)) !== 0) {
 				$template .= "<h3 style='color:yellow;'>Binding params</h3>";
-				$template .= "<p style='background:#fff;color:#000;border-radius:5px;padding:10px;'>".$params."</p>";
+				$template .= "<p style='background:#fff;color:#000;border-radius:5px;padding:10px;'>" . $params . "</p>";
 			}
 			$template .= "</div>";
 			echo $template;
 		}
 
-		if(self::$type == "select"){
+		if (self::$type == "select") {
 			return __CLASS__;
 		} else {
 			return true;
@@ -377,9 +398,10 @@ class DB extends config {
 	}
 
 	/*** Fetch ***/
-	public static function fetch($type = "all"){
+	public static function fetch($type = "all")
+	{
 		try {
-			 $result = self::$query->setFetchMode(PDO::FETCH_ASSOC);
+			$result = self::$query->setFetchMode(PDO::FETCH_ASSOC);
 
 			if ($type == "all") {
 				$result = self::$query->fetchall();
@@ -394,13 +416,15 @@ class DB extends config {
 	}
 
 	/*** Last Id ***/
-	public static function lastid(){
+	public static function lastid()
+	{
 		$lastid = parent::$con->lastInsertId();
 		return $lastid;
 	}
 
 	/*** Connection End ***/
-	function __destruct(){
+	function __destruct()
+	{
 		$this->con = NULL;
 		if ($this->con == null) {
 			return true;

@@ -1,5 +1,6 @@
 <?php
-class media {
+class media
+{
 
   private static $file;
   private static $fileName = [];
@@ -9,16 +10,17 @@ class media {
   private static $newName = [];
   private static $files = [];
 
-  public static function file($name) {
+  public static function file($name)
+  {
     self::$file = $_FILES[$name]['name'];
     if (is_array($_FILES[$name]['name'])) {
-      for ($i=0 ; $i < count($_FILES[$name]['name']); $i++) {
+      for ($i = 0; $i < count($_FILES[$name]['name']); $i++) {
         self::$fileName[] = $_FILES[$name]['name'][$i];
         self::$fileSize[] = $_FILES[$name]['size'][$i];
         self::$fileTmp[] = $_FILES[$name]['tmp_name'][$i];
         self::$fileType[] = $_FILES[$name]['type'][$i];
       }
-    } elseif(!is_array($_FILES[$name]['name'])) {
+    } elseif (!is_array($_FILES[$name]['name'])) {
       self::$fileName[] = $_FILES[$name]['name'];
       self::$fileSize[] = $_FILES[$name]['size'];
       self::$fileTmp[] = $_FILES[$name]['tmp_name'];
@@ -27,39 +29,43 @@ class media {
 
     return __CLASS__;
   }
-  public static function type($extensions) {
+  public static function type($extensions)
+  {
     foreach (self::$fileType as $value) {
       $tmp = explode('/', $value);
       $file_extension = end($tmp);
-      if (in_array($file_extension,$extensions) === false) {
+      if (in_array($file_extension, $extensions) === false) {
         die("Inavlid file extension");
       }
     }
     return __CLASS__;
   }
-  public static function size($size, $msg="Image size must be 2 mb or lower") {
+  public static function size($size, $msg = "Image size must be 2 mb or lower")
+  {
     foreach (self::$fileSize as $sizes) {
       if ($sizes > $size) {
-        message::set($msg,"error");
+        message::set($msg, "error");
         break;
       }
     }
     return __CLASS__;
   }
-  public static function name($name) {
+  public static function name($name)
+  {
     foreach (self::$fileName as $oname) {
-      self::$newName[] = $name.time().basename($oname);
+      self::$newName[] = $name . time() . basename($oname);
     }
     return __CLASS__;
   }
-  public static function folder($location) {
+  public static function folder($location)
+  {
     try {
       for ($i = 0; $i < count(self::$fileTmp); $i++) {
-        $target = "{$location}/".self::$newName[$i];
+        $target = "{$location}/" . self::$newName[$i];
         move_uploaded_file(self::$fileTmp[$i], $target);
-          self::$files[] = [
-            "name" => self::$newName[$i], 
-          ];
+        self::$files[] = [
+          "name" => self::$newName[$i],
+        ];
       }
       if (is_array(self::$file)) {
         $data = self::$files;
@@ -89,19 +95,20 @@ class media {
   }
 
 
-  public static function image($image) {
-      if(empty($image) || $image == "avatar.png"){
-        return "./uploads/placeholder/avatar.png";
-      } else if (file_exists("./uploads/{$image}") && !empty($image)){
-       return "./uploads/{$image}";
+  public static function image($image)
+  {
+    if (empty($image) || $image == "avatar.png") {
+      return "./uploads/placeholder/avatar.png";
+    } else if (file_exists("./uploads/{$image}") && !empty($image)) {
+      return "./uploads/{$image}";
     }
   }
 
 
-  public static function remove($name){
+  public static function remove($name)
+  {
     if (file_exists($name)) {
       unlink($name);
     }
   }
-
 }
